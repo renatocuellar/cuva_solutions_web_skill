@@ -5,7 +5,9 @@
 //   node scripts/auditar-seo.mjs <carpeta-dist> [--salida <carpeta>] [--estricto]
 //
 // Revisa por página: título, descripción, h1, orden de títulos, canonical, robots, idioma, imagen para compartir,
-// datos estructurados (que sean JSON válido y qué tipos traen), imágenes sin alt o sin medidas, palabras,
+// datos estructurados (que sean JSON válido y qué tipos traen), imágenes sin alt o sin medidas, palabras
+// (mínimo 3.000 en pilares y 1.500 en satélites), pruebas de Rank Math (palabra clave en título, descripción,
+// URL, primer 10 %, subtítulos y alt, densidad, largo de URL, enlaces externos, índice y párrafos largos),
 // marcadores [ASÍ] sin llenar, textos de enlace genéricos y nofollow interno.
 // Revisa en todo el sitio: enlaces internos rotos, páginas huérfanas, profundidad desde el inicio,
 // reglas del silo (artículo → pilar, pilar → artículos, nada de artículo → artículo de otro silo),
@@ -144,7 +146,47 @@ for (const p of paginas) {
 
   const pend = H.marcadores(H.quitarEtiquetas(html.replace(/<script\b[\s\S]*?<\/script>/gi, '')));
   if (pend.length) add(AV, url, 'marcadores', `Marcadores sin llenar: ${pend.join(' ')}`);
-  if (p.tipo === 'articulo' && p.palabras < 500) add(AV, url, 'contenido', `Solo ${p.palabras} palabras en el contenido principal: revisa si responde completo.`);
+  // Extensión mínima CUVA: pilar 3.000+, satélite 1.500+ (08, secciones 3 y 4). Se cuenta el <article> si existe.
+  const cuerpoHtml = H.bloque(p.principal, 'article') ?? p.principal;
+  const cuerpoTexto = H.quitarEtiquetas(cuerpoHtml);
+  const palabrasCuerpo = H.contarPalabras(cuerpoTexto);
+  const MINIMO = { pilar: 3000, articulo: 1500 }[p.tipo];
+  if (MINIMO && !p.noindex && palabrasCuerpo < MINIMO) add(ERR, url, 'extension', `${p.tipo === 'pilar' ? 'Pilar' : 'Satélite'} con ${palabrasCuerpo} palabras: el mínimo es ${MINIMO.toLocaleString('es')}. Súmale sustancia (casos, tablas, pasos, ejemplos), nunca relleno.`);
+
+  // Pruebas de Rank Math (10-rank-math-y-urls.md, sección 2)
+  if (p.keyword && !p.noindex && ['pilar', 'articulo', 'servicio'].includes(p.tipo)) {
+    const N = (s = '') => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+    const kw = N(p.keyword);
+    const VACIAS = new Set(['de', 'del', 'la', 'el', 'los', 'las', 'en', 'y', 'para', 'por', 'con', 'un', 'una', 'a', 'al', 'que', 'se', 'tu', 'mi']);
+    const kwPalabras = kw.split(' ').filter((w) => w && !VACIAS.has(w));
+    const RM = (regla, detalle) => add(AV, url, `rankmath-${regla}`, detalle);
+    const tN = N(t || '');
+    if (!tN.includes(kw)) RM('titulo', `La palabra clave "${p.keyword}" no está en el título SEO.`);
+    else if (tN.indexOf(kw) > tN.length / 2) RM('titulo-inicio', 'La palabra clave está en la segunda mitad del título: llévala al inicio.');
+    if (!N(d || '').includes(kw)) RM('descripcion', 'La palabra clave no está en la meta descripción.');
+    const urlN = N(url);
+    if (!kwPalabras.every((w) => urlN.includes(w))) RM('url', `La URL no contiene las palabras de la palabra clave (${kwPalabras.join(', ')}).`);
+    const largoUrl = ((dominio || '') + url).length;
+    if (dominio && largoUrl > 75) RM('url-largo', `La URL mide ${largoUrl} caracteres con el dominio (máximo 75).`);
+    const cuerpoN = N(cuerpoTexto);
+    const pos = cuerpoN.indexOf(kw);
+    if (pos < 0) RM('contenido', 'La palabra clave exacta no aparece en el contenido.');
+    else if (pos > cuerpoN.length * 0.1) RM('inicio-contenido', 'La palabra clave no aparece en el primer 10 % del contenido.');
+    const apariciones = pos < 0 ? 0 : cuerpoN.split(kw).length - 1;
+    const densidad = palabrasCuerpo ? (apariciones / palabrasCuerpo) * 100 : 0;
+    if (densidad > 2.5) RM('densidad', `Densidad de ${densidad.toFixed(2)} %: suena repetido, usa variantes (meta 1 % a 1,5 %).`);
+    else if (densidad < 0.5 && palabrasCuerpo > 300) RM('densidad', `Densidad de ${densidad.toFixed(2)} %: la palabra clave casi no aparece (meta 1 % a 1,5 %, sumando variantes naturales).`);
+    if (!H.encabezados(cuerpoHtml).some((h) => h.nivel >= 2 && h.nivel <= 3 && N(h.texto).includes(kw))) RM('subtitulos', 'La palabra clave no está en ningún h2 o h3.');
+    if (!H.imagenes(cuerpoHtml).some((img) => N(img.alt || '').includes(kw))) RM('alt', 'Ninguna imagen del contenido tiene la palabra clave en su alt.');
+    if (H.imagenes(cuerpoHtml).length < (p.tipo === 'pilar' ? 4 : 2)) RM('imagenes', `Pocas imágenes en el contenido (meta: ${p.tipo === 'pilar' ? 4 : 2} o más).`);
+    const externos = H.enlaces(cuerpoHtml).filter((a) => /^https?:\/\//i.test(a.href) && (!dominio || !a.href.startsWith(dominio)));
+    if (!externos.length) RM('enlace-externo', 'Sin enlaces externos a fuentes de autoridad.');
+    else if (!externos.some((a) => !/nofollow|sponsored|ugc/.test(a.rel))) RM('enlace-externo-dofollow', 'Todos los enlaces externos llevan nofollow: al menos una fuente de autoridad va dofollow.');
+    const h2 = H.encabezados(cuerpoHtml).filter((h) => h.nivel === 2).length;
+    if ((p.tipo === 'pilar' || h2 >= 5) && !/articulo-indice|rank-math-toc|wp-block-rank-math-toc|class="[^"]*\btoc\b/i.test(cuerpoHtml)) RM('indice', 'Falta el índice de contenido (Table of Contents).');
+    const largos = [...cuerpoHtml.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/gi)].map((m) => H.contarPalabras(H.quitarEtiquetas(m[1]))).filter((n) => n > 120);
+    if (largos.length) RM('parrafos', `${largos.length} párrafo(s) de más de 120 palabras: divídelos.`);
+  }
 
   if (p.keyword && !p.noindex) {
     const k = p.keyword.toLowerCase();
