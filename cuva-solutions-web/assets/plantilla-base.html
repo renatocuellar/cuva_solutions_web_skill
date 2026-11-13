@@ -1,0 +1,69 @@
+<!doctype html>
+<!--
+  ESQUELETO TÉCNICO de plantillas/base.html para construir-sitio.mjs.
+  No es un diseño: muestra los marcadores que el script reemplaza y los cimientos que no se tocan
+  (guardia no-js, salto al contenido, menú que funciona sin JavaScript, librerías con defer).
+  La cabecera, el pie, el botón fijo y todo lo que se ve se diseñan desde cero para cada marca
+  con la dirección de arte aprobada. Copia este archivo a plantillas/base.html y diséñalo ahí.
+
+  Marcadores disponibles:
+    {{idioma}}         es-CO, es-MX... (de sitio.json)
+    {{head}}           <title>, descripción, canonical, robots, Open Graph y datos estructurados (obligatorio)
+    {{menu}}           <ul class="cuva-menu"> con pilares, blog y contacto
+    {{pie_silos}}      <ul class="cuva-pie-silos"> con las pilares
+    {{migas}}          migas de pan visibles (vacío en el inicio)
+    {{contenido}}      el fragmento de la página, con su h1
+    {{meta_articulo}}  autor y fechas (si el fragmento no trae el marcador cuva:meta y la plantilla no lo usa, va después del h1)
+    {{caja_autor}}     caja del autor en artículos y servicios
+    {{relacionados}}   bloque "Sigue leyendo" en artículos
+    {{tipo}} {{silo}} {{url}} {{canonical}} {{titulo}} {{descripcion}} {{marca}} {{color_tema}} {{anio}}
+    {{version}}        fecha y hora de la construcción: úsala en ?v= para que los cambios se vean
+    {{> nombre}}       inserta plantillas/partes/nombre.html (para compartir cabecera y pie entre plantillas)
+
+  Plantillas opcionales por tipo: plantillas/articulo.html, pilar.html, inicio.html, servicio.html,
+  pagina.html, blog.html, autor.html, contacto.html. Si no existe la del tipo, se usa base.html.
+-->
+<html lang="{{idioma}}" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>document.documentElement.classList.replace('no-js', 'js')</script>
+{{head}}
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<!-- Fuentes del primer pantallazo precargadas (dos pesos como máximo) -->
+<link rel="preload" href="/fonts/[FUENTE-TITULOS].woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/estilos.css?v={{version}}">
+</head>
+<body class="pagina-{{tipo}}" data-silo="{{silo}}">
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header class="cabecera">
+  <a class="cabecera-logo" href="/" aria-label="{{marca}}, inicio"><!-- logo SVG de la marca --></a>
+  <!-- details/summary: el menú del celular abre y cierra aunque no haya JavaScript -->
+  <details class="menu-movil">
+    <summary>Menú</summary>
+    <nav aria-label="Principal">{{menu}}</nav>
+  </details>
+  <nav class="menu-escritorio" aria-label="Principal">{{menu}}</nav>
+  <a class="boton boton-principal" href="[DESTINO DEL BOTÓN PRINCIPAL]">[VERBO DEL BOTÓN]</a>
+</header>
+
+<main id="contenido">
+  {{migas}}
+  {{contenido}}
+  {{caja_autor}}
+  {{relacionados}}
+</main>
+
+<footer class="pie">
+  <nav aria-label="Temas">{{pie_silos}}</nav>
+  <!-- Nombre, dirección, teléfono y horario: idénticos a sitio.json y al Perfil de Empresa en Google -->
+  <p>© {{anio}} {{marca}}</p>
+</footer>
+
+<!-- Barra fija del celular, librerías y main.js: references/03-animaciones.md (secciones 2, 3 y 15) -->
+<script src="/js/main.js?v={{version}}" defer></script>
+</body>
+</html>

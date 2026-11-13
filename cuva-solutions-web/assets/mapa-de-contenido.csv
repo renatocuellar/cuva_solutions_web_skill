@@ -1,0 +1,4 @@
+silo,url,tipo,titulo,keyword,secundarias,intencion,pregunta,entidades,experiencia,enlaza_a,volumen,prioridad,ola,estado
+silo-uno,/silo-uno/,pilar,[Título de la pilar],[palabra clave de la pilar],[variante 1];[variante 2],contratar,[Pregunta grande del tema],[entidad 1];[entidad 2],[DATO DE EXPERIENCIA],/contacto/,por validar,9,1,pendiente
+silo-uno,/silo-uno/guia-base/,articulo,[Qué es ... y cómo funciona],[palabra clave],[variante],aprender,[¿Qué es ...?],[entidad],[DATO DE EXPERIENCIA],/silo-uno/;/silo-uno/proceso/,por validar,6,1,pendiente
+silo-uno,/silo-uno/costos/,articulo,[Cuánto cuesta ... en (país)],[palabra clave],[variante],comparar,[¿Cuánto cuesta ...?],[entidad],[RANGO DE PRECIO REAL Y FECHA],/silo-uno/;/silo-uno/como-elegir/,por validar,8,1,pendiente

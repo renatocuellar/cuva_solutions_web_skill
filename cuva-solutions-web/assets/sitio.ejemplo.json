@@ -1,0 +1,62 @@
+{
+  "dominio": "https://www.tunegocio.com",
+  "idioma": "es-CO",
+  "locale_og": "es_CO",
+  "marca": "[NOMBRE DE LA MARCA]",
+  "descripcion": "[Una frase: qué hace el negocio, para quién y dónde.]",
+  "separador_titulo": " | ",
+  "color_tema": "#000000",
+  "logo": "/img/logo.png",
+  "og_imagen_defecto": "/img/og-imagen.jpg",
+
+  "negocio": {
+    "tipo": "ProfessionalService",
+    "nombre": "[NOMBRE LEGAL O COMERCIAL]",
+    "descripcion": "[Qué hace, en una o dos frases.]",
+    "telefono": "+57[NÚMERO]",
+    "email": "[CORREO]",
+    "direccion": { "calle": "[CALLE Y NÚMERO]", "ciudad": "[CIUDAD]", "region": "[DEPARTAMENTO O ESTADO]", "codigo_postal": "[CÓDIGO]", "pais": "CO" },
+    "geo": { "lat": null, "lng": null },
+    "horario": ["Mo-Fr 08:00-18:00", "Sa 09:00-13:00"],
+    "area_servida": ["[CIUDAD]"],
+    "precio_rango": null,
+    "fundacion": null,
+    "redes": ["https://www.instagram.com/[usuario]", "https://www.linkedin.com/company/[empresa]"]
+  },
+
+  "autores": {
+    "nombre-apellido": {
+      "nombre": "[NOMBRE Y APELLIDO]",
+      "cargo": "[CARGO O ESPECIALIDAD]",
+      "bio": "[Dos frases con su experiencia real.]",
+      "foto": "/img/autores/nombre-apellido.webp",
+      "redes": ["https://www.linkedin.com/in/[usuario]"],
+      "sabe_de": ["[TEMA 1]", "[TEMA 2]"]
+    }
+  },
+
+  "silos": [
+    { "slug": "silo-uno", "nombre": "[NOMBRE DEL SILO 1]", "menu": "[TEXTO CORTO PARA EL MENÚ]", "descripcion_corta": "[Qué cubre este silo, en una frase.]" },
+    { "slug": "silo-dos", "nombre": "[NOMBRE DEL SILO 2]" },
+    { "slug": "silo-tres", "nombre": "[NOMBRE DEL SILO 3]" },
+    { "slug": "silo-cuatro", "nombre": "[NOMBRE DEL SILO 4]" },
+    { "slug": "silo-cinco", "nombre": "[NOMBRE DEL SILO 5]" }
+  ],
+
+  "menu_extra": null,
+
+  "blog": {
+    "titulo": "Blog",
+    "descripcion": "[De 120 a 160 caracteres: qué encuentra la persona en el blog y para quién es.]",
+    "intro": "[Una frase de bienvenida al blog.]"
+  },
+
+  "textos": {
+    "inicio": "Inicio",
+    "sigue_leyendo": "Sigue leyendo",
+    "en_este_silo": "En esta guía"
+  },
+
+  "rastreadores_ia": { "busqueda": true, "entrenamiento": true },
+  "llms_txt": true
+}
