@@ -24,7 +24,7 @@ Este archivo es largo. Abre solo las secciones que pide tu etapa.
 | [13. Botón magnético](#13-botón-magnético-solo-con-mouse) | Botón que sigue al mouse; 13.1 estados del botón sin perder contraste |
 | [14. Acordeón](#14-acordeón-de-preguntas-frecuentes-accesible) | Preguntas frecuentes accesibles |
 | [15. Barra fija en celular](#15-barra-fija-en-celular) | Botón de contacto a un pulgar de distancia, con o sin formulario |
-| [16. Efectos con el scroll](#16-efectos-pegados-al-scroll-y-tarjetas-apiladas-solo-en-escritorio) | Parallax, aperturas y tarjetas apiladas en escritorio |
+| [16. Efectos con el scroll](#16-efectos-pegados-al-scroll-y-tarjetas-apiladas-solo-en-escritorio) | Parallax, aperturas y tarjetas apiladas en escritorio; **16.1 imágenes que se expanden con parallax (estándar en todo sitio)** |
 | [17. Menos movimiento](#17-menos-movimiento-prefers-reduced-motion) | Qué se apaga con "Reducir movimiento", también en la hoja de muestra |
 | [18. Rendimiento](#18-reglas-de-rendimiento) | Reglas para que todo vaya fluido en celular |
 | [19. Versión sin librerías](#19-versión-sin-librerías-para-sitios-ligeros) | Equivalentes ligeros para tarjetas, gracias y guías |
@@ -32,7 +32,7 @@ Este archivo es largo. Abre solo las secciones que pide tu etapa.
 
 Qué leer en cada etapa:
 - **Etapa 3, dirección de arte y hoja de muestra:** sección 0 (sobre todo 0.3, 0.7, 0.8 y 0.9) y, para construir la muestra, 2, 3, 4 (si la ficha usa Lenis), 6.1, 7, 8, 9.2, 9.3, 13.1 y 17.
-- **Etapa 5, construcción:** 1 a 5 siempre; de 6 a 16 solo lo que pide la coreografía; 19 si el nivel es ligero; 2.2 y 2.3 si trabajas en claude.ai.
+- **Etapa 5, construcción:** 1 a 5 y 16.1 siempre; de 6 a 16 solo lo que pide la coreografía; 19 si el nivel es ligero; 2.2 y 2.3 si trabajas en claude.ai.
 - **Etapa 6, revisión:** 20, `references/04-calidad-y-publicacion.md` y `07-seo-tecnico-y-aeo.md` (sección 3).
 
 Los bloques de código de este archivo son ingredientes técnicos, no diseños. Salen de cuatro sitios reales ya publicados (landing de conferencias, página de gracias, tarjeta de contacto y guía paso a paso) y ya probaron que funcionan en producción. Por eso su parte técnica se respeta siempre: arranque seguro, respaldos, accesibilidad y rendimiento. Lo que se ve y se siente (qué se mueve, con qué curva, cuánto tarda, cuánto recorre, en qué dirección y en qué orden) cambia en cada marca. Los números que traen los ejemplos son los de la landing de referencia y sirven para leer el código; si se quedan tal cual, todos los sitios terminan moviéndose igual que ella.
@@ -1939,12 +1939,119 @@ safe(() => {
 
 `gsap.matchMedia` crea los efectos solo en escritorio y los deshace solo si la ventana se achica.
 
+### 16.1 Parallax con imágenes que se expanden al hacer scroll (estándar CUVA)
+
+**Cuándo usarlo:** siempre. Es el efecto base de todos los sitios CUVA: cada imagen de contenido (hero, banners, servicios, equipo, casos, imágenes de pilares y satélites) se expande suave mientras entra en pantalla y luego se desplaza en parallax dentro de su marco. Se marca en el HTML con `data-expand` y el mismo código anima todo el sitio. Demostración completa y funcionando en `assets/demo-parallax.html`.
+
+**Qué se adapta a la marca:** la forma de la apertura (`inset` con el radio de la marca, círculo, esquinas rectas), cuánto se expande, cuánto se mueve el parallax y en qué variante va cada imagen. Valores sobrios: apertura de 4 % a 6 % y parallax de 4 %. Valores enérgicos: apertura de 10 % a 14 % y parallax de 8 %. Los números del ejemplo son de la demo, no de una marca.
+
+**Qué no se toca:** `ease: 'none'` con `scrub`, la imagen siempre más grande que su marco mientras se mueve (escala mínima 1.1), estado inicial solo con GSAP (sin JS la imagen se ve completa), nada de pin, valores más cortos en celular y nada de efecto con "Reducir movimiento".
+
+Variantes por atributo:
+
+| Atributo | Para qué | Qué hace |
+|---|---|---|
+| `data-expand` | Imagen de contenido (por defecto) | Se abre desde un marco recortado hasta su tamaño completo y la foto baja de escala 1.3 a 1.1 |
+| `data-expand="full"` | Banner o imagen a sangre | Crece desde una tarjeta con márgenes hasta todo el ancho de la pantalla |
+| `data-expand="hero"` | Imagen principal del inicio | Arranca visible (nunca invisible), y al bajar se expande a pantalla completa mientras el titular sube |
+| `data-expand="soft"` | Imágenes dentro de artículos | Versión corta y discreta: apertura de 3 % y escala de 1.12 a 1.05 |
+| `data-speed="0.8"` | Capas decorativas o textos grandes | Parallax por capas: menos de 1 va más lento que el scroll, más de 1 más rápido |
+
+HTML. Cada imagen va dentro de su marco y con `width` y `height` para que no mueva la página al cargar:
+
+```html
+<figure class="media" data-expand>
+  <img src="/img/servicio-instalacion.webp" width="1600" height="1000" alt="[QUÉ MUESTRA LA FOTO]" loading="lazy">
+</figure>
+
+<figure class="media media--full" data-expand="full">
+  <img src="/img/banner-equipo.webp" width="2400" height="1200" alt="[QUÉ MUESTRA LA FOTO]" loading="lazy">
+</figure>
+```
+
+CSS:
+
+```css
+.media{position:relative;overflow:hidden;border-radius:var(--radius, 24px);aspect-ratio:var(--ratio, 16/10);margin:0}
+.media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:50% 50%}
+.media--full{border-radius:0;aspect-ratio:auto;height:min(90vh, 900px)}
+.js [data-expand]{will-change:clip-path}            /* solo mientras hay JS; sin JS todo se ve normal */
+@media (prefers-reduced-motion:reduce){ .js [data-expand]{will-change:auto} }
+```
+
+JS, dentro de `safe()` y después de `if (RM) return` (sección 3.4):
+
+```js
+safe(() => {
+  const mm = gsap.matchMedia();
+  mm.add({ desk: '(min-width: 901px)', mob: '(max-width: 900px)' }, (ctx) => {
+    const { desk } = ctx.conditions;
+    // Valores de la marca: salen de la ficha de movimiento (0.7)
+    const V = {
+      inset: desk ? 12 : 5,         // % que se recorta el marco al entrar
+      radius: desk ? 36 : 20,       // radio de la apertura, en px (el de la marca)
+      scaleFrom: desk ? 1.3 : 1.18, // la foto arranca más grande...
+      scaleTo: 1.1,                 // ...y nunca baja de 1.1 para que el parallax no muestre bordes
+      drift: desk ? 6 : 3,          // % de parallax dentro del marco
+    };
+
+    $$('[data-expand]').forEach((fig) => {
+      const img = fig.querySelector('img, video, picture');
+      if (!img) return;
+      const tipo = fig.dataset.expand || 'base';
+      const soft = tipo === 'soft';
+      const ins = soft ? 3 : tipo === 'full' ? V.inset * 0.6 : V.inset;
+
+      if (tipo === 'hero') {
+        // El hero ya se ve completo al cargar: solo se expande al bajar
+        gsap.timeline({ scrollTrigger: { trigger: fig, start: 'top 70%', end: 'bottom top', scrub: true } })
+          .fromTo(fig, { clipPath: `inset(0% ${ins / 2}% 0% ${ins / 2}% round ${V.radius}px)` },
+                       { clipPath: 'inset(0% 0% 0% 0% round 0px)', ease: 'none' }, 0)
+          .fromTo(img, { scale: V.scaleTo, yPercent: 0 }, { scale: 1.2, yPercent: V.drift, ease: 'none' }, 0);
+        return;
+      }
+
+      // 1. Apertura: el marco se abre y la foto baja de escala mientras entra
+      gsap.fromTo(fig,
+        { clipPath: `inset(${ins}% ${ins}% ${ins}% ${ins}% round ${V.radius}px)` },
+        { clipPath: `inset(0% 0% 0% 0% round ${tipo === 'full' ? 0 : V.radius}px)`, ease: 'none',
+          scrollTrigger: { trigger: fig, start: 'top bottom', end: soft ? 'top 55%' : 'top 25%', scrub: true } });
+      gsap.fromTo(img, { scale: soft ? 1.12 : V.scaleFrom }, { scale: soft ? 1.05 : V.scaleTo, ease: 'none',
+          scrollTrigger: { trigger: fig, start: 'top bottom', end: soft ? 'top 55%' : 'top 25%', scrub: true } });
+
+      // 2. Parallax: la foto se desplaza dentro del marco durante todo su paso por la pantalla
+      if (!soft) gsap.fromTo(img, { yPercent: -V.drift }, { yPercent: V.drift, ease: 'none',
+          scrollTrigger: { trigger: fig, start: 'top bottom', end: 'bottom top', scrub: true } });
+    });
+
+    // Capas con velocidad propia (formas de la marca, números grandes, textos de fondo)
+    $$('[data-speed]').forEach((el) => {
+      const s = parseFloat(el.dataset.speed) || 1;
+      gsap.to(el, { yPercent: (1 - s) * (desk ? 60 : 25), ease: 'none',
+        scrollTrigger: { trigger: el.closest('section') || el, start: 'top bottom', end: 'bottom top', scrub: true } });
+    });
+  });
+});
+```
+
+Por qué así:
+- `scale` y `yPercent` son dos tweens distintos sobre la misma imagen: GSAP combina las dos partes del `transform` sin que una borre a la otra.
+- La escala nunca baja de 1.1 mientras hay parallax: la foto siempre es más grande que el marco y no se ven bordes.
+- `clip-path` con `inset(... round Npx)` da la apertura con el radio de la marca y no mueve el diseño ni el texto de alrededor.
+- `gsap.matchMedia` arma valores distintos en celular y escritorio, y rehace todo si cambia el ancho.
+- Con "Reducir movimiento" el código no corre (va después de `if (RM) return`) y la imagen se ve completa y quieta. Sin JavaScript, igual.
+
+Rendimiento: en páginas con más de 20 imágenes, usa `data-expand="soft"` en las de la mitad de abajo; `clip-path` es caro si se anima en decenas de elementos a la vez. Llama `ScrollTrigger.refresh()` cuando terminen de cargar las fuentes y las imágenes sin medidas (sección 18, punto 5).
+
 ### Errores típicos
 
 - Usar `expo.out` u otra curva con `scrub`: el movimiento deja de coincidir con el dedo.
 - Fijar (pin) secciones largas o hacer scroll horizontal anclado. En la landing de referencia se sintió como scroll trabado y se rehízo como cuadrícula. Prohibido en celular; en escritorio, solo efectos cortos.
 - `overflow: hidden` en una sección con sticky adentro: el sticky deja de pegarse. Usa `overflow-x: clip`.
 - Parallax con una imagen del mismo alto que su marco: al moverse se ven los bordes.
+- Esconder la imagen con CSS (`[data-expand]{clip-path:inset(20%)}`) en lugar de `gsap.fromTo`: sin JavaScript la foto queda recortada.
+- Expandir la imagen del hero desde invisible o desde un recorte grande al cargar: el LCP se retrasa. El hero arranca completo y se expande solo al bajar.
+- Dejar que la escala llegue a 1 mientras sigue el parallax: aparecen franjas vacías arriba o abajo.
 
 ---
 

@@ -2,6 +2,14 @@
 
 Lee este archivo antes de escribir la primera pilar o el primer artículo, y en cada ola de producción. Un sitio con 5 silos y 50 artículos solo funciona si cada artículo es mejor que lo que ya existe sobre su pregunta. Si son 50 textos promedio, el sitio pesa menos que uno con 10 buenos.
 
+Tres reglas que no se negocian en ninguna pieza:
+
+| Regla | Detalle |
+|---|---|
+| **Extensión mínima** | Pilar: **3.000 palabras o más**. Satélite (cada artículo del silo): **1.500 palabras o más**. Se cuentan en el contenido, sin menú ni pie. `auditar-seo.mjs` marca error si no llega |
+| **SEO de Rank Math** | Cada pieza pasa la lista de `10-rank-math-y-urls.md`, sección 7, con puntaje verde |
+| **100 % humano** | Cada pieza pasa la revisión de `09-escritura-humana.md`, sección 6 |
+
 ## Contenido
 
 1. Antes de escribir: el brief
@@ -22,7 +30,13 @@ Lee este archivo antes de escribir la primera pilar o el primer artículo, y en 
 Cada artículo sale de su fila en `mapa-de-contenido.csv`. Antes de escribirlo, completa este brief (no se muestra a la persona salvo que lo pida):
 
 ```
-Artículo: [título]  ·  URL: [url]  ·  Silo: [silo]
+Artículo: [título]  ·  URL: [url, menos de 75 caracteres con dominio]  ·  Silo: [silo]  ·  Tipo: [pilar | satélite]
+Palabra clave principal (Rank Math): [única]  ·  Secundarias: [2 a 4]
+Título SEO: [50 a 60 caracteres, palabra clave al inicio, sentimiento o palabra poderosa, número si es honesto]
+Meta descripción: [140 a 160 caracteres, con la palabra clave]
+Extensión meta: [3.000+ pilar | 1.500+ satélite] y de dónde sale el largo: [casos, tablas, pasos, ejemplos por cliente]
+Cliente ideal al que le habla: [del brief de marca, con sus palabras]
+Tono: [de tú o de usted, palabras sí y no del brief]
 Pregunta principal: [pregunta exacta]
 Respuesta en dos frases: [lo que debe quedar claro aunque solo lea el inicio]
 Intención: [aprender | resolver | comparar | contratar]
@@ -67,7 +81,7 @@ La pilar es la mejor página del sitio sobre su tema y la que vende el servicio 
 8. **Preguntas frecuentes** del servicio en `<section data-faq>`.
 9. **Cierre con el botón principal.**
 
-Extensión orientativa: lo necesario para cubrir el tema sin relleno, normalmente entre 1.500 y 3.000 palabras. Se diseña como una landing: con la dirección de arte completa, su gesto de movimiento por sección y los elementos gráficos de la marca.
+**Extensión: 3.000 palabras o más**, sin relleno. Para llegar con sustancia, la guía del tema (punto 6) desarrolla cada subtema en 150 a 300 palabras antes de enlazar al satélite, y la pilar suma una tabla comparativa, el proceso detallado, errores frecuentes con su costo y de 6 a 10 preguntas frecuentes. Índice de contenido obligatorio. Se diseña como una landing: con la dirección de arte completa, su gesto de movimiento por sección, imágenes que se expanden con parallax (`03-animaciones.md`, sección 16.1) y los elementos gráficos de la marca.
 
 ## 4. Estructura de un artículo
 
@@ -106,8 +120,8 @@ Extensión orientativa: lo necesario para cubrir el tema sin relleno, normalment
 
 Notas:
 
-- **Extensión según la intención,** no por número: una pregunta puntual se responde bien en 800 a 1.200 palabras; una guía o comparativa, en 1.500 a 2.500. Si alcanza con menos, menos.
-- **El índice** va solo en artículos con 5 `h2` o más.
+- **Extensión del satélite: 1.500 palabras o más.** Una guía o comparativa suele pedir de 2.000 a 2.500. El largo sale de la intención: pasos detallados, ejemplos por tipo de cliente, tablas explicadas, errores frecuentes y la experiencia del negocio (`09-escritura-humana.md`, sección 5). Si una pregunta no da para 1.500 palabras útiles, no es un satélite: se fusiona con otro o pasa a ser pregunta frecuente de la pilar.
+- **De 5 a 8 `h2`** para cubrir la pregunta con profundidad. **El índice** va siempre que haya 5 `h2` o más (Rank Math lo pide).
 - **Preguntas frecuentes** de 3 a 5, distintas de los `h2`.
 - **Fuentes** solo si se usaron datos externos. Entidades oficiales, normas, fabricantes y estudios con fecha. Nunca se inventa una fuente ni un enlace.
 - **El caso real** lleva permiso del cliente para nombrarlo; sin permiso se describe sin datos que lo identifiquen.
@@ -119,15 +133,16 @@ Notas:
 3. **Frases cortas y voz activa.** Un párrafo, una idea. Máximo 4 líneas en celular.
 4. **Concreto sobre general:** "entre 3 y 6 meses según el uso" en lugar de "periódicamente".
 5. **Cero relleno:** sin introducciones sobre "en el mundo de hoy", sin repetir el título, sin conclusiones que resumen lo que acaba de leer.
-6. **Que se lea como lo escribió una persona que sabe del tema** y lo quiere contar bien: con un hilo de principio a fin, ejemplos y opinión fundamentada del negocio. Si la persona tiene la skill `humanizer` o una propia de estilo, pásale el texto.
+6. **100 % humano:** que se lea como lo escribió una persona del negocio que sabe del tema y lo quiere contar bien, con hilo, ejemplos, ritmo variado y opinión fundamentada. Las reglas completas están en `09-escritura-humana.md`.
 7. **Muletillas de texto automático fuera:** "en conclusión", "cabe destacar", "es importante mencionar", "sumérgete", "descubre", "potencia", "en el dinámico mundo", "no solo X sino también Y", listas de tres adjetivos, rayas largas para conectar ideas.
 8. **Cada afirmación con sustento:** experiencia del negocio, fuente externa con fecha o razonamiento claro. Lo que no se pueda sostener, se quita.
 9. **Nada de salud, finanzas o legal sin respaldo profesional:** en esos temas el autor tiene credenciales visibles o el artículo cita a la autoridad correspondiente, y se aclara cuándo consultar a un profesional.
-10. **Palabra clave con naturalidad:** en el `h1`, en la primera frase y donde caiga sola. Nunca repetida para posicionar.
+10. **Palabra clave con naturalidad, en los lugares que pide Rank Math:** título SEO, meta descripción, URL, `h1`, primer 10 % del texto, uno o dos `h2` y el `alt` de una imagen, con densidad cercana a 1 % a 1,5 % (`10-rank-math-y-urls.md`). Nunca repetida a la fuerza: si suena repetida, usa variantes.
+11. **Párrafos de menos de 120 palabras** y al menos un enlace externo dofollow a una fuente de autoridad.
 
 ## 6. Imágenes
 
-- **Una imagen destacada por artículo** (también se usa para compartir) y de 1 a 3 dentro del texto donde expliquen algo.
+- **Una imagen destacada por artículo** (también se usa para compartir) y, dentro del texto, 4 o más en pilares y 2 o más en satélites, donde expliquen algo. Una de ellas lleva la palabra clave en su `alt`, de forma natural.
 - **Fotos propias primero.** Si no hay, ilustración o composición con los elementos gráficos de la marca (`01-identidad-y-referencia.md`, 3.2). Las imágenes generadas con IA solo como ilustración, nunca simulando fotos del negocio, su equipo o sus clientes.
 - WebP, de 30 a 150 KB, con `width`, `height`, `loading="lazy"` y `alt` que describe la imagen. La destacada se exporta además en JPG de 1200 x 630 para compartir.
 - Nombre de archivo descriptivo: `filtro-minisplit-sucio.webp`, no `IMG_2034.webp`.
@@ -142,11 +157,11 @@ Los artículos son parte del diseño, no una plantilla de blog genérica. Se dis
 - La respuesta directa destacada con un recurso de la marca (un trazo, un color suave, un elemento gráfico propio).
 - Tablas que se desplazan dentro de su caja en celular, sin romper el ancho de la página.
 - El bloque de acción, la caja de autor y "Sigue leyendo" con piezas de la marca.
-- Movimiento mínimo: revelado discreto y, si la dirección lo pide, barra de progreso. Sin preloader.
+- Movimiento mínimo: revelado discreto, imágenes que se expanden suave al entrar (`03-animaciones.md`, sección 16.1, con valores más cortos que en el inicio) y, si la dirección lo pide, barra de progreso. Sin preloader.
 
 ## 8. Producción por olas
 
-1. La ola 1 se escribe en la etapa 5, junto con el sitio: todas las pilares y de 3 a 4 artículos por silo.
+1. La ola 1 se escribe en la etapa 5, junto con el sitio: todas las pilares y de 3 a 4 artículos por silo. Por el largo mínimo, cada pilar se escribe en 2 o 3 respuestas y cada satélite en 1 o 2; dilo al empezar.
 2. Cada ola siguiente: de 5 a 10 artículos por ronda, todos del mismo silo cuando se pueda (comparten entrevista, entidades y fuentes).
 3. Al empezar cada ronda, di cuáles artículos van y cuántas respuestas vas a necesitar.
 4. Cada artículo pasa la revisión de la sección 9, se marca `estado: listo`, se construye el sitio y se corre `auditar-seo.mjs`.
@@ -161,9 +176,12 @@ Los artículos son parte del diseño, no una plantilla de blog genérica. Se dis
 - [ ] Enlaza a su pilar en los primeros párrafos, a 2 o 3 hermanos y, como máximo, a una pilar de otro silo.
 - [ ] Ningún enlace a borradores ni a páginas que no existen.
 - [ ] Un solo `h1`, `h2` en forma de pregunta donde corresponde, preguntas frecuentes visibles.
-- [ ] Título de 50 a 60 caracteres y descripción de 120 a 160, únicos en el sitio.
+- [ ] Título de 50 a 60 caracteres y descripción de 140 a 160, únicos en el sitio.
 - [ ] Imagen destacada con `alt`, medidas y peso correcto.
-- [ ] Se lee de corrido, con hilo, sin muletillas ni relleno.
+- [ ] Pilar con 3.000 palabras o más; satélite con 1.500 o más, sin relleno.
+- [ ] Pasa la lista Rank Math de `10-rank-math-y-urls.md`, sección 7.
+- [ ] Pasa la revisión de humanidad de `09-escritura-humana.md`, sección 6.
+- [ ] Usa el tono, las palabras y el cliente ideal del brief de marca.
 - [ ] Autor y fechas correctas en la cabecera del fragmento.
 
 ## 10. Actualizar y mantener

@@ -36,6 +36,7 @@ Inicio  /
 - **Profundidad máxima: 3 clics desde el inicio.** Inicio, pilar, artículo.
 - **El silo es el tema, no el formato.** No hay una rama "blog" con todo adentro: cada artículo vive en el silo de su tema. `/blog/` es una vitrina que enlaza hacia los silos.
 - **La pilar vende y enseña.** Responde la pregunta grande del tema, explica el servicio, muestra prueba y lleva al botón principal. Desde ahí se ramifica a cada subtema.
+- **Extensión mínima:** pilar de 3.000 palabras o más; cada satélite de 1.500 o más. Sin relleno: si un tema no da para 1.500 palabras útiles, se fusiona con otro satélite (`08-blog-y-articulos.md`, secciones 3 y 4).
 - **Mínimo 5 silos y 10 artículos por silo.** Es el piso para mostrar autoridad temática. Si un tema no da para 10 artículos útiles, no es un silo: es un artículo dentro de otro silo.
 - **Las páginas de servicio específicas** (por ejemplo, "mantenimiento para empresas") viven dentro de su silo como páginas de soporte, con las mismas reglas.
 
@@ -58,6 +59,9 @@ Reglas:
 - Siempre con barra final. La URL canónica es exactamente esa.
 - Una URL nunca cambia después de publicar. Si cambia, va una redirección 301 de la vieja a la nueva y se anota en el LEEME.
 - Si el sitio viejo existe, haz la tabla de redirecciones antes de publicar: cada URL vieja con tráfico apunta a la nueva más parecida, nunca todas al inicio.
+- **Reglas de Rank Math para URLs:** menos de 75 caracteres contando `https://` y el dominio, palabra clave en el slug, el slug del satélite no repite la palabra clave de la pilar porque ya está en la carpeta, y dos niveles como máximo. En WordPress, el silo se arma con páginas hijas o con categorías sin base. Todo el detalle en `10-rank-math-y-urls.md`, secciones 4 y 5.
+
+**Nombres.** En esta skill "satélite" y "artículo de soporte" son lo mismo: cada página que cuelga de una pilar. En el CSV y en las cabeceras el `tipo` sigue siendo `articulo`.
 
 ## 3. Las 10 reglas de enlazado
 
